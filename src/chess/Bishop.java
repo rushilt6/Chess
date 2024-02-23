@@ -1,8 +1,11 @@
 package chess;
 public class Bishop extends Piece
 {
-    public Bishop(String input)
+    public Bishop(String color, Position position)
     {
-        super(input);
+        super(color, position);
+    }
+    public boolean moveValid(Position newPosition, Board board){
+        return false;
     }
 }

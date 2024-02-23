@@ -3,8 +3,11 @@ import java.util.*;
 
 public class King extends Piece
 {
-    public King(String input)
+    public King(String color, Position position)
     {
-        super(input);
+        super(color, position);
+    }
+    public boolean moveValid(Position newPosition, Board board){
+        return false;
     }
 }
