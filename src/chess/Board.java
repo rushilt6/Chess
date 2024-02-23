@@ -37,6 +37,7 @@ public class Board
 
         board[0][3] = new Queen("white", new Position(1, 3));
         board[7][3] = new Queen("black", new Position(8, 3));
+    }
 
         board[0][4] = new King("white", new Position(1, 4));
         board[7][4] = new King("black", new Position(8, 4));
