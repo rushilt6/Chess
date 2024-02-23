@@ -15,7 +15,7 @@ public class Board
             }
         }
 
-        for(int i = 0;i <= 8;i++){
+        for(int i = 0;i < 8;i++){
             board[1][i] = new Pawn("white",new Position(2,i));
             board[6][i] = new Pawn("black",new Position(7,i));
         }

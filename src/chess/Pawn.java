@@ -11,6 +11,8 @@ public class Pawn extends Piece
     @Override
     public boolean moveValid(Position newPosition, Board board)
     {
+        if(!(newPosition.inBounds())){ return false;}
+        
         int dir = this.getColor().equals("white") ? 1 : -1;
         int startRank = this.getColor().equals("white") ? 2 : 7;
 
