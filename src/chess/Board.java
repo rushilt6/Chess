@@ -8,6 +8,13 @@ public class Board
         createBoard();
     }
     private void createBoard(){
+
+        for (int rank = 2; rank < 6; rank++) {
+            for (int file = 0; file < 8; file++) {
+                board[rank][file] = new VacantSquare(new Position(rank + 1, file));
+            }
+        }
+
         for(int i = 0;i <= 8;i++){
             board[1][i] = new Pawn("white",new Position(2,i));
             board[6][i] = new Pawn("black",new Position(7,i));
@@ -30,5 +37,11 @@ public class Board
 
         board[0][3] = new Queen("white", new Position(1, 3));
         board[7][3] = new Queen("black", new Position(8, 3));
+
+        board[0][4] = new King("white", new Position(1, 4));
+        board[7][4] = new King("black", new Position(8, 4));
+
+
+
     }
 }

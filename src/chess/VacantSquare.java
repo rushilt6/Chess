@@ -2,8 +2,11 @@ package chess;
 import java.util.*;
 public class VacantSquare extends Piece
 {
-    public VacantSquare(String input)
+    public VacantSquare(Position position)
     {
-        super(input);
+        super(null,position);
+    }
+    public boolean moveValid(Position newPos, Board board){
+        return false;
     }
 }
