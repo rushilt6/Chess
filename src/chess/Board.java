@@ -41,7 +41,5 @@ public class Board
         board[0][4] = new King("white", new Position(1, 4));
         board[7][4] = new King("black", new Position(8, 4));
 
-
-
     }
 }
