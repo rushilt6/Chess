@@ -2,43 +2,23 @@ package chess;
 import java.util.*;
 public abstract class Piece 
 {
-    String input;
-    boolean hasMoved;
+    protected String color;
+    protected Position position;
     
-    public Piece(String input)
+    public Piece(String color, Position position)
     {
-        this.input = input;
-        hasMoved = false;
+        this.color = color;
+        this.position = position;
     }
 
-    public String getInput()
-    {
-        return input;
+    public String getColor(){
+        return color;
     }
-
-    public boolean hasMoved()
-    {
-        return this.hasMoved;
+    public Position getPosition(){
+        return position;
     }
-
-    public void setMoved(boolean hasMoved)
-    {
-        this.hasMoved = hasMoved;
+    public void setPosition(Position position){
+        this.position = position;
     }
-
-    public void move(String oldPos, String newPos)
-    {
-        return;
-    }
-
-    public boolean moveValid(String oldPos, String newPos)
-    {
-        return true;
-    }
-
-    public boolean isPathEmpty(String oldPos, String newPos)
-    {
-        return true;
-    }
-
+    public abstract boolean moveValid(Position newPosition, Board board);
 }
