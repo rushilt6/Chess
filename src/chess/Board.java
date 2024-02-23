@@ -44,6 +44,6 @@ public class Board
     }
     public Piece getPiece(Position pos)
     {
-        return board[pos.getFile()][pos.getRank()];
+        return board[pos.getRank()-1][pos.getFile()];
     }
 }
