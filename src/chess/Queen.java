@@ -2,12 +2,12 @@ package chess;
 import java.util.*;
 public class Queen extends Piece
 {
-    public Queen(String color, String piece, Position position)
+    public Queen(String color, Position position)
     {
-        super(color, piece, position);
+        super(color, position);
     }
     
-    public boolean moveValid(Position newPos, Piece piece, Board board){
+    public boolean moveValid(Position newPos, Board board){
         if(!(newPos.inBounds())){ return false;}
 
         Position oldPos = this.getPosition();

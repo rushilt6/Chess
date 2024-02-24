@@ -2,12 +2,12 @@ package chess;
 import java.util.*;
 public class Knight extends Piece
 {
-    public Knight(String color, String piece, Position position)
+    public Knight(String color, Position position)
     {
-        super(color, piece, position);
+        super(color, position);
     }
     
-    public boolean moveValid(Position newPosition, Piece piece, Board board){
+    public boolean moveValid(Position newPosition, Board board){
         if(!(newPosition.inBounds())) return false;
         int rankDiff = Math.abs(newPosition.getRank() - this.getPosition().getRank());
         int fileDiff = Math.abs(newPosition.getFile() - this.getPosition().getFile());

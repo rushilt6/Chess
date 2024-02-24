@@ -3,12 +3,12 @@ import java.util.*;
 public class Rook extends Piece
 {
 
-    public Rook(String color, String piece, Position position)
+    public Rook(String color, Position position)
     {
-        super(color, piece, position);
+        super(color, position);
     }
     @Override
-    public boolean moveValid(Position newPos, Piece piece, Board board)
+    public boolean moveValid(Position newPos, Board board)
     {
         if(!(newPos.inBounds())){ return false;}
         Position oldPos = this.getPosition();

@@ -4,9 +4,9 @@ public class VacantSquare extends Piece
 {
     public VacantSquare(Position position)
     {
-        super(null,null,position);
+        super(null,position);
     }
-    public boolean moveValid(Position newPos, Piece piece, Board board){
+    public boolean moveValid(Position newPos, Board board){
         return false;
     }
 }

@@ -3,13 +3,13 @@ import java.util.*;
 public class Pawn extends Piece
 {
 
-    public Pawn(String color, String piece, Position position)
+    public Pawn(String color, Position position)
     {
-        super(color, piece, position);
+        super(color, position);
     }
 
     @Override
-    public boolean moveValid(Position newPosition, Piece piece, Board board)
+    public boolean moveValid(Position newPosition, Board board)
     {
         if(!(newPosition.inBounds())){ return false;}
         
@@ -23,14 +23,17 @@ public class Pawn extends Piece
                 return board.getPiece(newPosition) instanceof VacantSquare;
             } else if(this.getPosition().getRank() == startRank && rankDiff == (2 * dir)){
                 Position infront = new Position(this.getPosition().getRank() + dir, this.getPosition().getFile());
-                return board.getPiece(newPosition) instanceof VacantSquare;
+                return board.getPiece(newPosition) instanceof VacantSquare && board.getPiece(infront) instanceof VacantSquare;
             }
         }
-        
         if(Math.abs(fileDiff) == 1 && rankDiff == dir){
             return !(board.getPiece(newPosition) instanceof VacantSquare) && 
             !(board.getPiece(newPosition).getColor()==this.getColor());
         }
         return false;
+    }
+    public boolean canPromote(Position newPosition){
+        return ((this.getColor()=="white" && newPosition.getRank()==8) || 
+                (this.getColor()=="black" && newPosition.getRank()==1));
     }
 }
