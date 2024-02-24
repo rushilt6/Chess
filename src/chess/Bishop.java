@@ -11,6 +11,8 @@ public class Bishop extends Piece
     }
     public boolean moveValid(Position newPos, Piece piece, Board board)
     {
+        if(!(newPos.inBounds())){ return false;}
+
         Position oldPos = this.getPosition();
         int oldPosFile = oldPos.getFile(); // File is letters 0-7
         int oldPosRank = oldPos.getRank() - 1; // Rank is 1-8
@@ -52,11 +54,6 @@ public class Bishop extends Piece
 
         return false;
     }
-    public void movePiece(Position newPos, Piece piece, char promPiece, Board board)
-    {
-        super(color, position);
-    }
-
     public boolean emptyPath(Position newPos, Board board) 
     {
         Position oldPos = this.getPosition();
