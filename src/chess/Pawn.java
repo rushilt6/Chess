@@ -3,13 +3,13 @@ import java.util.*;
 public class Pawn extends Piece
 {
 
-    public Pawn(String color, Position position)
+    public Pawn(String color, String piece, Position position)
     {
-        super(color,position);
+        super(color, piece, position);
     }
 
     @Override
-    public boolean moveValid(Position newPosition, Board board)
+    public boolean moveValid(Position newPosition, Piece piece, Board board)
     {
         if(!(newPosition.inBounds())){ return false;}
         
