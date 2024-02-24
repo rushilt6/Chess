@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Bishop extends Piece
 {
-    public Bishop(String color, String piece, Position position)
+    public Bishop(String color, Position position)
     {
-        super(color, piece, position);
+        super(color, position);
     }
-    public boolean moveValid(Position newPos, Piece piece, Board board)
+    public boolean moveValid(Position newPos, Board board)
     {
         Position oldPos = this.getPosition();
         int oldPosFile = oldPos.getFile(); // File is letters 0-7
@@ -51,10 +51,6 @@ public class Bishop extends Piece
         
 
         return false;
-    }
-    public void movePiece(Position newPos, Piece piece, char promPiece, Board board)
-    {
-        super(color, position);
     }
 
     public boolean emptyPath(Position newPos, Board board) 

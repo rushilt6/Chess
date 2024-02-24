@@ -3,11 +3,11 @@ import java.util.*;
 
 public class King extends Piece
 {
-    public King(String color, String piece, Position position)
+    public King(String color, Position position)
     {
-        super(color, piece, position);
+        super(color, position);
     }
-    public boolean moveValid(Position newPos, Piece piece, Board board)
+    public boolean moveValid(Position newPos, Board board)
     {
         if(!(newPos.inBounds())){ return false;}
         int oldPosFile = this.getPosition().getFile(); // File is letters 0-7
