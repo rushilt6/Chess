@@ -45,7 +45,6 @@ public class Chess {
 		Piece pieceAtNew = board.getPiece(to);
 		board.setPiece(to, piece, promote);
 		board.setPiece(from, new VacantSquare(from),"");
-
 		if(inCheck(player)){
 			board.setPiece(from,piece,promote);
 			board.setPiece(to,pieceAtNew,promote);

@@ -4,11 +4,13 @@ public abstract class Piece
 {
     protected String color;
     protected Position position;
-    
+    protected boolean moved;
+
     public Piece(String color, Position position)
     {
         this.color = color;
         this.position = position;
+        moved = false;
     }
 
     public String getColor(){
@@ -26,6 +28,14 @@ public abstract class Piece
     {
         return false;
     }
+    public boolean getMoved()
+    {
+        return moved;
+    }
+    public void setMoved(boolean moved)
+    {
+        this.moved = moved;
+    }
 
-    
+
 }
