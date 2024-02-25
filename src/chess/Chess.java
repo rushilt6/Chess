@@ -176,4 +176,157 @@ public class Chess {
 		}
 		return true;
 	}
+
+	private void castle(Position oldPos, Position newPos)
+	{
+		Piece kingObj, rookObj;
+		kingObj = board.getPiece(oldPos);
+		Position oldRook, newRook;
+
+		if(newPos.equals(new Position(1, 3))) 
+		{
+			oldRook = new Position(1, 1);
+			newRook = new Position(1, 4);
+			rookObj = board.getPiece(oldPos);
+		}
+		else if(newPos.equals(new Position(1, 7))) 
+		{
+			oldRook = new Position(1, 8);
+			newRook = new Position(1, 6);
+			rookObj = board.getPiece(oldPos);
+		}
+		else if(newPos.equals(new Position(8, 3))) 
+		{
+			oldRook = new Position(8, 1);
+			newRook = new Position(8, 4);
+			rookObj = board.getPiece(oldPos);
+		}
+		else // Checking g8 since compiler does not like for some objects to not be initialized at the end
+		{
+			oldRook = new Position(8, 8);
+			newRook = new Position(8, 6);
+			rookObj = board.getPiece(oldPos);
+		}
+		kingObj.setPosition(newPos);
+		board.setPiece(newPos, kingObj, "");
+		board.setPiece(oldPos, new VacantSquare(oldPos), "");
+		kingObj.setMoved(true);
+		rookObj.setPosition(newRook);
+		board.setPiece(newRook, rookObj, "");
+		board.setPiece(oldPos, new VacantSquare(oldRook), "");
+		rookObj.setMoved(true);
+	}
+
+	private static boolean canCastle(Position oldPos, Position newPos) {
+		
+		Position oldRook, newRook;
+		Piece kingObj, rookObj;
+		
+		kingObj = board.getPiece(oldPos);
+		if(!(kingObj instanceof King)) {
+			return false;        
+		}
+		//rank is column, file is row
+		Position whiteKing = new Position(1, 5);
+		Position blackKing = new Position(8, 5);
+		Position c1 = new Position(1, 3);
+		Position g1 = new Position(1,7);
+		Position c8 = new Position(8,3);
+		Position g8 = new Position(1, 7);
+
+		Position pos1, pos2, pos3;
+
+
+		if(kingObj instanceof King && ((((oldPos.equals(whiteKing)) && (newPos.equals(c1) || newPos.equals(g1)))) || ((oldPos.equals(blackKing)) && (newPos.equals(c8) || newPos.equals(g8)))))
+		{
+			if(newPos.equals(c1)) 
+			{
+				oldRook = new Position(1, 1);
+				rookObj = board.getPiece(oldRook);
+				newRook = new Position(1, 4);
+
+				//Check e1, d1, c1
+				pos1 = new Position(1, 5);
+				pos2 = new Position(1, 4);
+				pos3 = c1;
+			}
+			else if(newPos.equals(g1)) 
+			{
+				oldRook = new Position(1, 8);
+				rookObj = board.getPiece(oldRook);
+				newRook = new Position(1, 6);
+
+				//Check e1, f1, g1
+				pos1 = new Position(1, 5);
+				pos2 = new Position(1, 6);
+				pos3 = g1;
+			}
+			else if(newPos.equals(c8)) 
+			{
+				oldRook = new Position(8, 1);
+				rookObj = board.getPiece(oldRook);
+				newRook = new Position(8, 4);
+
+				//Check e8, d8, c8
+				pos1 = new Position(8, 5);
+				pos2 = new Position(8, 4);
+				pos3 = c8;
+			}
+			else // Checking g8 since compiler does not like for some objects to not be initialized at the end
+			{
+				oldRook = new Position(8, 8);
+				rookObj = board.getPiece(oldRook);
+				newRook = new Position(8, 6);
+
+				//Check e8, f8, g8
+				pos1 = new Position(8, 5);
+				pos2 = new Position(8, 4);
+				pos3 = g8;
+
+			}
+			if(!rookObj.emptyPath(oldPos, board))
+				return false;
+			
+			board.setPiece(pos1, kingObj, "");
+			board.setPiece(oldPos, new VacantSquare(oldPos), "");
+			if (inCheck(player)) 
+			{
+				board.setPiece(oldPos, kingObj, "");
+				board.setPiece(pos1, new VacantSquare(pos1), "");
+				return false;
+			}
+			board.setPiece(pos2, kingObj, "");
+			if (inCheck(player))
+			{
+				board.setPiece(oldPos, kingObj, "");
+				board.setPiece(pos2, new VacantSquare(pos2), "");
+				return false;
+			} 
+			board.setPiece(pos3, kingObj, "");
+			if (inCheck(player))
+			{
+				board.setPiece(oldPos, kingObj, "");
+				board.setPiece(pos3, new VacantSquare(pos3), "");
+				return false;
+			} 
+			
+			if(rookObj instanceof Rook) 
+			{	
+				if(kingObj.getMoved() == false && rookObj.getMoved() == false) 
+				{
+					kingObj.setPosition(newPos);
+					kingObj.setMoved(true);
+					rookObj.setPosition(newRook);
+					rookObj.setMoved(true);
+					return true;
+				}
+				else 
+					return false;
+			}
+			else
+				return false;
+		}
+		return false;
+	} 
+}
 }
