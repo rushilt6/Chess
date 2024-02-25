@@ -18,6 +18,7 @@ public class Chess {
 	public static ReturnPlay play(String move) {
 
 		/* FILL IN THIS METHOD */
+		String playerColor = Player.white == player ? "white" : "black";
 		ReturnPlay result = new ReturnPlay();
 		if(move.equalsIgnoreCase("resign")){
 			if(player == Player.white){
@@ -36,7 +37,7 @@ public class Chess {
 		String promote = split.length == 3 ? split[2] : "";
 
 		Piece piece = board.getPiece(from);
-		if(!piece.moveValid(to, board)){
+		if((piece instanceof VacantSquare) || !(piece.getColor().equals(playerColor)) || !piece.moveValid(to, board)){
 			result.message = ReturnPlay.Message.ILLEGAL_MOVE;
 			result.piecesOnBoard = getBoard();
 			return result;
@@ -51,7 +52,14 @@ public class Chess {
 			result.message = ReturnPlay.Message.CHECK;
 		}
 		result.piecesOnBoard = getBoard();
-
+		if(result.message == null){
+			player = Player.black == player ? Player.white : Player.black;
+		}
+		if(inCheck(player)){
+			if(isCheckmate(player)){
+				result.message = Player.white == player ? ReturnPlay.Message.CHECKMATE_BLACK_WINS : ReturnPlay.Message.CHECKMATE_WHITE_WINS;
+			}
+		}
 		return result;
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
@@ -122,7 +130,7 @@ public class Chess {
 		for(int r = 1; r < 9; r++){
 			for(int f = 0; f < 8; f++){
 				Piece piece = board.getPiece(new Position(r,f));
-				if(!piece.getColor().equals(playerColor) && piece.moveValid(kingPos, board)){
+				if(!(piece instanceof VacantSquare) && !piece.getColor().equals(playerColor) && piece.moveValid(kingPos, board)){
 					return true;
 				}
 			}
@@ -140,5 +148,33 @@ public class Chess {
 			}
 		}
 		return null;
+	}
+	private static boolean isCheckmate(Player player){
+		String playerColor = Player.white == player ? "white" : "black";
+		for(int startR = 1; startR < 9; startR++){
+			for(int startF = 0; startF < 8; startF++){
+				Position currPosition = new Position(startR,startF);
+				Piece currPiece = board.getPiece(currPosition);
+				if(!(currPiece instanceof VacantSquare) && currPiece.getColor().equals(playerColor)){
+					for(int endR = 1; endR < 9; endR++){
+						for(int endF = 0; endF < 8; endF++){
+							Position endPos = new Position(endR, endF);
+							if(currPiece.moveValid(endPos, board)){
+								Piece oldPiece = board.getPiece(endPos);
+								board.setPiece(endPos, currPiece,"");
+								board.setPiece(currPosition, new VacantSquare(currPosition),"");
+								boolean check = inCheck(player);
+								board.setPiece(endPos,oldPiece,"");
+								board.setPiece(currPosition,currPiece,"");
+								if(!check){
+									return false;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return true;
 	}
 }
