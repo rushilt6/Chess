@@ -15,7 +15,7 @@ public class Board
             }
         }
 
-        for(int i = 0;i <= 8;i++){
+        for(int i = 0;i < 8;i++){
             board[1][i] = new Pawn("white", new Position(2,i));
             board[6][i] = new Pawn("black", new Position(7,i));
         }
@@ -35,8 +35,8 @@ public class Board
         board[7][2] = new Bishop("black", new Position(8, 2));
         board[7][5] = new Bishop("black", new Position(8, 5));
 
-        board[0][4] = new King("white", new Position(1, 4));
-        board[7][4] = new King("black", new Position(8, 4));
+        board[0][3] = new Queen("white", new Position(1, 3));
+        board[7][3] = new Queen("black", new Position(8, 3));
         
         board[0][4] = new King("white", new Position(1, 4));
         board[7][4] = new King("black", new Position(8, 4));
@@ -68,7 +68,6 @@ public class Board
             piece.setPosition(position);
             board[position.getRank()-1][position.getFile()] = piece;
         }
-        board[oldPosition.getRank()-1][oldPosition.getFile()] = new VacantSquare(oldPosition);
     }
 
 }

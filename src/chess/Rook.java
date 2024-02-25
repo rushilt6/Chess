@@ -57,24 +57,23 @@ public class Rook extends Piece
     public boolean emptyPath(Position newPos, Board board)
     {
         Position oldPos = this.getPosition();
-        int x = Math.abs((newPos.getRank()-1) - (oldPos.getRank()-1));
-        int y = Math.abs(newPos.getFile() - oldPos.getFile());
 
+        // Determine the direction of the diagonal move
         int fileDirection = Integer.compare(newPos.getFile(), oldPos.getFile());
         int rankDirection = Integer.compare(newPos.getRank(), oldPos.getRank());
 
-        for(int i = 1; i<x+y; i++)
-        {
-            int intermediateFile = oldPos.getFile() + i * fileDirection;
-            int intermediateRank = oldPos.getRank()-1 + i * rankDirection;
-            Position pos = new Position(intermediateRank, intermediateFile);
-            if (!(board.getPiece(pos) instanceof VacantSquare)) 
-            {
-                // There is a piece in the path
+        int currRank = oldPos.getRank() + rankDirection;
+        int currFile = oldPos.getFile() + fileDirection;
+        // Traverse the path and check for pieces
+        while(currRank != newPos.getRank() || currFile != newPos.getFile()){
+            if(!(board.getPiece(new Position(currRank, currFile)) instanceof VacantSquare)){
                 return false;
             }
+            currRank += rankDirection;
+            currFile += fileDirection;
         }
 
+        // The path is empty
         return true;
     }
 }
