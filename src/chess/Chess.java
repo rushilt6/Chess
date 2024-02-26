@@ -5,6 +5,7 @@ public class Chess {
 	private static Board board;
 	private static Player player;
 	enum Player { white, black }
+	private static boolean castleLegal = false;
 	
 	/**
 	 * Plays the next move for whichever player has the turn.
@@ -30,11 +31,20 @@ public class Chess {
 			result.piecesOnBoard = getBoard();
 			return result;
 		}
-
+		if(!move.contains(" "))
+		{
+			result.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			result.piecesOnBoard = getBoard();
+			return result;
+		}
 		String[] split = move.split(" ");
 		Position from = convertPosition(split[0]);
 		Position to = convertPosition(split[1]);
 		String promote = split.length == 3 ? split[2] : "";
+		boolean isPromotion = false;
+
+		if(!promote.equals(""))
+			isPromotion = true;
 		if(!from.inBounds() || !to.inBounds()){
 			result.message = ReturnPlay.Message.ILLEGAL_MOVE;
 			result.piecesOnBoard = getBoard();
@@ -46,7 +56,13 @@ public class Chess {
 		{
 			Piece piece = board.getPiece(from);
 			if((piece instanceof VacantSquare) || !(piece.getColor().equals(playerColor)) || !piece.moveValid(to, board)){
+				
 				result.message = ReturnPlay.Message.ILLEGAL_MOVE;
+				if(castleLegal)
+				{
+					result.message = ReturnPlay.Message.CHECK;
+					castleLegal = false;
+				}
 				result.piecesOnBoard = getBoard();
 				return result;
 			}
@@ -97,6 +113,15 @@ public class Chess {
 				result.message = Player.white == player ? ReturnPlay.Message.CHECKMATE_BLACK_WINS : ReturnPlay.Message.CHECKMATE_WHITE_WINS;
 			}
 		}
+		if (split.length == 4 && split[3].equalsIgnoreCase("draw?")) 
+		{
+			result.message = ReturnPlay.Message.DRAW;
+		}
+		else if(split.length == 3 && isPromotion && promote.equalsIgnoreCase("draw?"))
+		{
+			result.message = ReturnPlay.Message.DRAW;
+		}
+		
 		return result;
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */
 		/* WHEN YOU FILL IN THIS METHOD, YOU NEED TO RETURN A ReturnPlay OBJECT */
@@ -321,13 +346,13 @@ public class Chess {
 				return false;
 			if (inCheck(player)) 
 			{
-				board.setPiece(oldPos, kingObj, "");
-				board.setPiece(pos1, new VacantSquare(pos1), "");
+				castleLegal = true;
 				return false;
 			}
 			board.setPiece(pos2, kingObj, "");
 			if (inCheck(player))
 			{
+				castleLegal = true;
 				board.setPiece(oldPos, kingObj, "");
 				board.setPiece(pos2, new VacantSquare(pos2), "");
 				return false;
@@ -335,6 +360,7 @@ public class Chess {
 			board.setPiece(pos3, kingObj, "");
 			if (inCheck(player))
 			{
+				castleLegal = true;
 				board.setPiece(oldPos, kingObj, "");
 				board.setPiece(pos3, new VacantSquare(pos3), "");
 				return false;
