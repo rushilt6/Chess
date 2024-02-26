@@ -40,7 +40,7 @@ public class Chess {
 		String[] split = move.split(" ");
 		Position from = convertPosition(split[0]);
 		Position to = convertPosition(split[1]);
-		String promote = split.length == 3 ? split[2] : "";
+		String promote = split.length >= 3 ? split[2] : "";
 		boolean isPromotion = false;
 
 		if(!promote.equals(""))
