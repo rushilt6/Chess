@@ -74,7 +74,7 @@ public class Chess {
 				|| (piece.getColor().equals("black") && to.getRank()==piece.getPosition().getRank()-1))){
 					Position adjacent = new Position(piece.getPosition().getRank(),to.getFile());
 					Piece adjPiece = board.getPiece(adjacent);
-					if(adjPiece instanceof Pawn && ((Pawn)adjPiece).canEnPassant() && adjPiece.getColor()!=piece.getColor()){
+					if(adjPiece instanceof Pawn && ((Pawn)adjPiece).canEnPassant() && adjPiece.getColor()!=piece.getColor() && board.getPiece(to) instanceof VacantSquare){
 						Piece pieceAtNew = board.getPiece(to);
 						Piece adjacentPiece = board.getPiece(adjacent);
 						board.setPiece(to,piece,"");
