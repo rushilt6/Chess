@@ -3,7 +3,7 @@ import java.util.*;
 public class Chess {
 	
 	private static Board board;
-	private static Player player = Player.white;
+	private static Player player;
 	enum Player { white, black }
 	
 	/**
@@ -35,7 +35,11 @@ public class Chess {
 		Position from = convertPosition(split[0]);
 		Position to = convertPosition(split[1]);
 		String promote = split.length == 3 ? split[2] : "";
-
+		if(!from.inBounds() || !to.inBounds()){
+			result.message = ReturnPlay.Message.ILLEGAL_MOVE;
+			result.piecesOnBoard = getBoard();
+			return result;
+		}
 		if(canCastle(from, to))
 			executeCastle(from,to);
 		else
@@ -46,16 +50,42 @@ public class Chess {
 				result.piecesOnBoard = getBoard();
 				return result;
 			}
-			Piece pieceAtNew = board.getPiece(to);
-			board.setPiece(to, piece, promote);
-			board.setPiece(from, new VacantSquare(from),"");
-			if(inCheck(player)){
-				board.setPiece(from,piece,promote);
-				board.setPiece(to,pieceAtNew,promote);
-				result.message = ReturnPlay.Message.CHECK;
-
+			boolean completedEnPassant = false;
+			if(piece instanceof Pawn){
+				int fileDiff = Math.abs(to.getFile() - piece.getPosition().getFile());
+				if(fileDiff == 1 
+				&& ((piece.getColor().equals("white") && to.getRank()==piece.getPosition().getRank()+1)
+				|| (piece.getColor().equals("black") && to.getRank()==piece.getPosition().getRank()-1))){
+					Position adjacent = new Position(piece.getPosition().getRank(),to.getFile());
+					Piece adjPiece = board.getPiece(adjacent);
+					if(adjPiece instanceof Pawn && ((Pawn)adjPiece).canEnPassant() && adjPiece.getColor()!=piece.getColor()){
+						Piece pieceAtNew = board.getPiece(to);
+						Piece adjacentPiece = board.getPiece(adjacent);
+						board.setPiece(to,piece,"");
+						board.setPiece(from,new VacantSquare(from),"");
+						board.setPiece(adjacent, new VacantSquare(adjacent), "");
+						if(inCheck(player)){
+							board.setPiece(from,piece,"");
+							board.setPiece(to,pieceAtNew,"");
+							board.setPiece(adjacent,adjacentPiece,"");
+							result.message = ReturnPlay.Message.CHECK;
+						}
+						completedEnPassant = true;
+					}
+				}
 			}
-			piece.setMoved(true);
+			if(!completedEnPassant){
+				Piece pieceAtNew = board.getPiece(to);
+				board.setPiece(to, piece, promote);
+				board.setPiece(from, new VacantSquare(from),"");
+				if(inCheck(player)){
+					board.setPiece(from,piece,promote);
+					board.setPiece(to,pieceAtNew,promote);
+					result.message = ReturnPlay.Message.CHECK;
+
+				}
+				piece.setMoved(true);
+			}
 		}
 		
 		result.piecesOnBoard = getBoard();
@@ -78,6 +108,7 @@ public class Chess {
 	 */
 	public static void start() {
 		board = new Board();
+		player = Player.white;
 	}
 
 	private static Position convertPosition(String pos){
@@ -184,7 +215,6 @@ public class Chess {
 		}
 		return true;
 	}
-
 	private static void executeCastle(Position oldPos, Position newPos)
 	{
 		Piece kingObj, rookObj;
